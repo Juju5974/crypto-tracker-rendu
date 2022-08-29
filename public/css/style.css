@@ -1,0 +1,164 @@
+@font-face {
+	font-family: 'Akzidenz';
+	src: url(akzidenz-grotesk-bq-condensed.otf) format(‘otf’)
+}
+@font-face {
+	font-family: 'Roboto-bold';
+	src: url(roboto-bold.ttf) format(‘ttf’)
+}
+@font-face {
+	font-family: 'Roboto-regular';
+	src: url(roboto-regular.ttf) format(‘ttf’)
+}
+
+* {
+    font-family: 'Roboto-regular';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-size: 2vw;
+    width: 100vw;
+    min-width: 300px;
+    max-width: 700px;
+    height: 100vh;
+    min-height:600px;
+    max-height: 1000px;
+}
+.logo {
+    font-family: 'Akzidenz', sans-serif;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.menu svg {
+    fill:#efefef;
+    height: 18px;
+    
+}
+.total * {
+    font-weight: bold;
+    font-size: 2rem;
+}
+.total a {
+    text-decoration: none;
+}
+.total a:hover, a:focus {
+    text-shadow: 0px 0px 15px #1fc36c, 0px 0px 15px #1fc36c;
+}
+.list, .header-add-remove {
+    border-bottom: 1px solid #303030;
+}
+.list {
+    width: 80%;
+}
+.actif {
+    display: flex;
+    align-items: center;
+}
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: end;   
+}
+.crypto-acronym {
+    font-weight: bold;
+    font-size: 1rem;
+}
+.crypto {
+    height: 20px;
+}
+.crypto-name {
+    font-size: 0.5rem;
+    font-weight:50;
+}
+.title {
+    font-family: 'Roboto-bold';
+    font-weight: bold;
+    font-size: 1rem;
+}
+.header-add-remove {
+    position: relative;
+}
+.cross-back svg {
+    padding-left: 20px;
+    fill:#efefef;
+    position:absolute;
+    height: 18px;
+    left:0;
+}
+.article-add-remove {
+    height: 80%
+}
+form {
+    font-size: 0.75rem;
+    width: 70%;
+    height: 100%;
+    max-height: 800px;
+    position: relative;
+}
+select {
+    appearance: none;
+}
+input, select {
+    border: 1px solid dimgray;
+    border-radius: 3px;
+    width: 100%;
+    padding-left: 40px;
+}
+input:focus, select:focus, button:focus, input:hover, select:hover, button:hover {
+    border: 1px solid #1fc36c;
+    box-shadow: 0px 0px 3px #efefef, 0px 0px 5px #1fc36c, 0px 0px 15px #1fc36c;
+    outline: none;
+}
+input::placeholder {
+    color: #efefef;
+}
+.input-icone, .select-icone {
+    position:relative; 
+}
+.input-icone svg, .select-icone svg { 
+    padding-left:14px;
+    fill:dimgray;
+    position:absolute;
+    left:0;
+    height: 14px;
+}
+.input-icone svg {
+    top:27px; 
+}
+.select-icone svg {
+    top:59px; 
+}
+button {
+    border: none;
+    border-radius: 5px;
+    width: 80%;
+    font-weight: bold;
+    font-size: 1.25rem;
+    padding: 3%;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.active-button {
+    background-color:#efefef;
+}
+.inactive-button {
+    background-color: dimgray;
+}
+
+@media screen and (min-width: 600px) {
+    * {
+        font-size: 16px;
+    }    
+    body {
+        width: 100%;
+        height: 100vh;
+        margin: auto;
+        border: 1px solid #efefef;
+        box-shadow: 0px 0px 1px #efefef, 0px 0px 5px dimgray, 0px 0px 15px dimgray;
+        border-radius: 30px;
+    }
+}

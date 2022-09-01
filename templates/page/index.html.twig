@@ -17,14 +17,26 @@
             <div>+ 2500 €</div>
         </a>    
     </article>
-    <article class="mx-auto">
-        <section class="list row mx-auto p-2">
-            <div class="actif col-9">
-                <img src="{{ asset('images/bitcoin-logo.svg') }}" class="crypto">
-                <span class="crypto-acronym ">BTC</span>
-                <span class="crypto-name p-1">(Bitcoin)</span>
-            </div>
-            <img src="{{ asset('images/empty-curved-arrow-up-upload-svgrepo-com.svg') }}" class="crypto col">
-        </section>
+    <article class="article-list mx-auto">
+
+        {% for i in 0 .. 29 %}
+            <section class="list row mx-auto p-2">
+                <div class="actif col">
+                    <img src="{{ asset('images/logos/' ~ data.data[i].id ~ '.png') }}" class="crypto-logo">
+                    <span class="crypto-acronym px-2">{{ data.data[i].symbol }}</span>
+                    <span class="crypto-name">({{ data.data[i].name }})</span>
+                </div>
+                {% if data.data[i].quote.EUR.percent_change_24h > 3 %}
+                    <img src="{{ asset('images/double-arrow-up.svg') }}" class="crypto-arrow col">
+                {% elseif data.data[i].quote.EUR.percent_change_24h > 0 %}
+                    <img src="{{ asset('images/arrow-up.svg') }}" class="crypto-arrow col">
+                {% elseif data.data[i].quote.EUR.percent_change_24h > -3 %}
+                    <img src="{{ asset('images/arrow-down.svg') }}" class="crypto-arrow col">
+                {% else %}
+                    <img src="{{ asset('images/double-arrow-down.svg') }}" class="crypto-arrow col">
+                {% endif %}
+            </section>
+        {% endfor %}
+
     </article>
 {% endblock %}

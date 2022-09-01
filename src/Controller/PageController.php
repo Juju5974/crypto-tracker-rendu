@@ -2,17 +2,22 @@
 
 namespace App\Controller;
 
+use App\Service\CallApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
-{
+{   
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(CallApiService $callApiService): Response
     {
+        $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
+
+        $decode = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        dump($decode);
         return $this->render('page/index.html.twig', [
-            'controller_name' => 'PageController',
+            'data' => $decode
         ]);
     }
     #[Route('/add', name: 'add')]

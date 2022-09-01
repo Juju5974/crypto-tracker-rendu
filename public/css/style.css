@@ -169,6 +169,17 @@ button {
         overflow-y: scroll;
         scrollbar-width: thin;
     }
+    .article-list::-webkit-scrollbar {
+        width: 10px; /* width of the entire scrollbar */
+    }  
+    .article-list::-webkit-scrollbar-track {
+        background: #100f0f; /* color of the tracking area */
+    }  
+    .article-list::-webkit-scrollbar-thumb {
+        background-color: dimgray; /* color of the scroll thumb */
+        border-radius: 20px; /* roundness of the scroll thumb */
+        border: 3px solid #100f0f; /* creates padding around scroll thumb */
+    }
 }
 @media screen and (min-height: 900px) and (min-width: 600px) {
     html {

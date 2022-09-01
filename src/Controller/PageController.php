@@ -15,7 +15,6 @@ class PageController extends AbstractController
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
 
         $decode = json_decode($callApiService->getCryptoData($cryptoApiKey));
-        dump($decode);
         return $this->render('page/index.html.twig', [
             'data' => $decode
         ]);

@@ -11,12 +11,15 @@
 	src: url(roboto-regular.ttf) format(‘ttf’)
 }
 
+/* basic reset */
 * {
     font-family: 'Roboto-regular';
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
+/* generality */
 body {
     font-size: 2vw;
     width: 100vw;
@@ -26,6 +29,8 @@ body {
     min-height:600px;
     max-height: 900px;
 }
+
+/* index */
 .logo {
     font-family: 'Akzidenz', sans-serif;
     font-weight: bold;
@@ -78,6 +83,8 @@ body {
     font-size: 0.65rem;
     font-weight:50;
 }
+
+/* add / remove */
 .title {
     font-family: 'Roboto-bold';
     font-weight: bold;
@@ -105,6 +112,25 @@ form {
 }
 select {
     appearance: none;
+    background-color: #100f0f
+}
+option:focus {
+    background-color: #1fc36c;
+}
+select {
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+select::-webkit-scrollbar {
+    width: 10px; /* width of the entire scrollbar */
+}  
+select::-webkit-scrollbar-track {
+    background: #100f0f; /* color of the tracking area */
+}  
+select::-webkit-scrollbar-thumb {
+    background-color: dimgray; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid #100f0f; /* creates padding around scroll thumb */
 }
 input, select {
     border: 1px solid dimgray;
@@ -112,7 +138,7 @@ input, select {
     width: 100%;
     padding-left: 40px;
 }
-input:focus, select:focus, button:focus, input:hover, select:hover, button:hover {
+input:focus, select:focus, input:hover, select:hover {
     border: 1px solid #1fc36c;
     box-shadow: 0px 0px 3px #efefef, 0px 0px 5px #1fc36c, 0px 0px 15px #1fc36c;
     outline: none;
@@ -147,12 +173,16 @@ button {
     bottom: 0;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: dimgray;
 }
-.active-button {
+button:hover {
     background-color:#efefef;
 }
-.inactive-button {
-    background-color: dimgray;
+li {
+    list-style-type: none;
+}
+ul {
+    margin: 0;
 }
 
 @media screen and (min-width: 600px) {   

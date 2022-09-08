@@ -6,33 +6,64 @@ use App\Service\CallApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CurrencyRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Controller\FormController;
 
 class PageController extends AbstractController
 {   
     #[Route('/', name: 'index')]
-    public function index(CallApiService $callApiService): Response
+    public function index(CallApiService $callApiService, CurrencyRepository $currencyRepo): Response
     {
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
-
-        $decode = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $apiData = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $total = $currencyRepo->find(1)->getAmount();
         return $this->render('page/index.html.twig', [
-            'data' => $decode
+            'apiData' => $apiData,
+            'total' => $total
         ]);
     }
+
     #[Route('/add', name: 'add')]
-    public function add(): Response
+    public function add(
+        CallApiService $callApiService,
+        CurrencyRepository $currencyRepo,
+        Request $request,
+        EntityManagerInterface $em,
+        FormController $form): Response
     {
+        $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
+        $apiData = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $currencies = $currencyRepo->findAll();
+        $addForm = $form->getForm($currencies, $request);
+        $form->flushForm($request, $addForm, $currencyRepo, $em, $apiData);   
         return $this->render('page/add.html.twig', [
-            'controller_name' => 'PageController',
+            'apiData' => $apiData,
+            'currencies' => $currencies,
+            'currencyForm' => $addForm->createView()
         ]);
     }
+
     #[Route('/remove', name: 'remove')]
-    public function remove(): Response
+    public function remove(
+        CallApiService $callApiService,
+        CurrencyRepository $currencyRepo, 
+        Request $request, 
+        EntityManagerInterface $em,
+        FormController $form): Response
     {
+        $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
+        $apiData = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $currencies = $currencyRepo->findAll();
+        $removeForm = $form->getForm($currencies, $request);
+        $form->flushForm($request, $removeForm, $currencyRepo, $em, $apiData);
         return $this->render('page/remove.html.twig', [
-            'controller_name' => 'PageController',
+            'currencies' => $currencies,
+            'currencyForm' => $removeForm->createView()
         ]);
     }
+
     #[Route('/chart', name: 'chart')]
     public function chart(): Response
     {

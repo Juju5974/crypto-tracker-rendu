@@ -14,7 +14,7 @@
     </header>
     <article class="total text-center my-5">
         <a href="{{ path('chart') }}" class="text-light">
-            <div>+ 2500 €</div>
+            <div>{{ total }} €</div>
         </a>    
     </article>
     <article class="article-list mx-auto">
@@ -22,15 +22,15 @@
         {% for i in 0 .. 29 %}
             <section class="list row mx-auto p-2">
                 <div class="actif col">
-                    <img src="{{ asset('images/logos/' ~ data.data[i].id ~ '.png') }}" class="crypto-logo">
-                    <span class="crypto-acronym px-2">{{ data.data[i].symbol }}</span>
-                    <span class="crypto-name">({{ data.data[i].name }})</span>
+                    <img src="{{ asset('images/logos/' ~ apiData.data[i].id ~ '.png') }}" class="crypto-logo">
+                    <span class="crypto-acronym px-2">{{ apiData.data[i].symbol }}</span>
+                    <span class="crypto-name">({{ apiData.data[i].name }})</span>
                 </div>
-                {% if data.data[i].quote.EUR.percent_change_24h > 3 %}
+                {% if apiData.data[i].quote.EUR.percent_change_24h > 3 %}
                     <img src="{{ asset('images/double-arrow-up.svg') }}" class="crypto-arrow col">
-                {% elseif data.data[i].quote.EUR.percent_change_24h > 0 %}
+                {% elseif apiData.data[i].quote.EUR.percent_change_24h > 0 %}
                     <img src="{{ asset('images/arrow-up.svg') }}" class="crypto-arrow col">
-                {% elseif data.data[i].quote.EUR.percent_change_24h > -3 %}
+                {% elseif apiData.data[i].quote.EUR.percent_change_24h > -3 %}
                     <img src="{{ asset('images/arrow-down.svg') }}" class="crypto-arrow col">
                 {% else %}
                     <img src="{{ asset('images/double-arrow-down.svg') }}" class="crypto-arrow col">

@@ -10,7 +10,6 @@ use App\Repository\CurrencyRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\FormController;
-use App\Controller\ValuationController;
 
 class PageController extends AbstractController
 {   
@@ -78,8 +77,7 @@ class PageController extends AbstractController
     public function chart(
         CallApiService $callApiService,
         CurrencyRepository $currencyRepo,
-        EntityManagerInterface $em,
-        ValuationController $valuationController)
+        EntityManagerInterface $em)
     {
         
         return $this->render('page/chart.html.twig', [

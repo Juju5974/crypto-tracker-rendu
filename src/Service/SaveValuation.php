@@ -1,16 +1,22 @@
 <?php
 
-namespace App\Controller;
+namespace App\Service;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use App\Entity\Valuation;
 
-class ValuationController extends AbstractController
+class SaveValuation
 {   
-    public function saveValuation($callApiService, $currencyRepo, $em)
+    private $getParams;
+
+    public function __construct(ParameterBagInterface $getParams)
     {
-        
-        $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
+        $this->getParams = $getParams;
+    }
+    
+    public function save($callApiService, $currencyRepo, $em)
+    {
+        $cryptoApiKey = $this->getParams->get('CRYPTO_API_KEY');
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
         $currentTotal = $currencyRepo->findBy(['name' => 'Total'])[0]->getAmount();

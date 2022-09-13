@@ -7,7 +7,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Validator\Constraints\PositiveOrZero;
-use Symfony\Component\HttpFoundation\Request;
 
 class FormController extends AbstractController
 {   
@@ -25,7 +24,7 @@ class FormController extends AbstractController
             ])
             ->add('quantity', NumberType::class, [
                 'attr' => ['placeholder' => 'Quantité'],
-                'constraints' => new PositiveOrZero(['message' => 'Le montant doit être positif.'])
+                'constraints' => new PositiveOrZero(['message' => 'La quantité doit être positve.'])
             ])
             ->add('amount', NumberType::class, [
                 'attr' => ['placeholder' => 'Prix d\'achat'],
@@ -41,7 +40,7 @@ class FormController extends AbstractController
         return $formRequest;
     }
 
-    public function flushForm($request, $formRequest, $currencyRepo, $em, $apiData)
+    public function flushForm($request, $formRequest, $currencyRepo, $em, $apiResponse)
     {
         if ($formRequest->isSubmitted() && $formRequest->isValid()) 
         {
@@ -50,25 +49,37 @@ class FormController extends AbstractController
             // $selectedCurrency like id_api
             $selectedCurrency = $data['currency'];
             $selectedQuantity = $data['quantity'];
-            $euroConversion = $apiData->data[$selectedCurrency]->quote->EUR->price;
+            $key = array_search($selectedCurrency, array_column($apiResponse['data'], 'id'));
+            $euroConversion = $apiResponse['data'][$key]['quote']['EUR']['price'];
             $selectedAmount = $selectedQuantity * $euroConversion;
+            $currentTotal = $currencyRepo->findBy(['name' => 'Total'])[0]->getAmount();
             $selectedCurrencyRepo = $currencyRepo->findBy(['idApi' => $selectedCurrency]);
             $currentName = $selectedCurrencyRepo[0]->getName();
+            $currentQuantity = $selectedCurrencyRepo[0]->getQuantity();
             $currentAmount = $selectedCurrencyRepo[0]->getAmount();
-
-            if ($routeName == 'add')
+            if ($routeName === 'add')
             {
 
-            } else if ($routeName == 'remove')
+                
+                        //Input montant à coder
+
+
+
+            } else if ($routeName === 'remove')
             {
+                $selectedQuantity = - $selectedQuantity;
                 $selectedAmount = - $selectedAmount;
             }
+            $newQuantity = $currentQuantity + $selectedQuantity;
             $newAmount = $currentAmount + $selectedAmount;
+            $newTotal = $currentTotal + $selectedAmount;
             if ($newAmount >= 0)
             {
+                $currencyRepo->findBy(['name' => 'Total'])[0]->setAmount($newTotal);
+                $selectedCurrencyRepo[0]->setQuantity($newQuantity);
                 $selectedCurrencyRepo[0]->setAmount($newAmount);
                 $em->flush();
-                $this->addFlash('success', 'La quantité de ' . $selectedQuantity . ' ' . $currentName . ' € a bien été pris en compte.');
+                $this->addFlash('success', 'La quantité de ' . $selectedQuantity . ' ' . $currentName . ' a bien été pris en compte.');
             } else if ($newAmount < 0) 
             {
                 $this->addFlash('fail', 'Le solde pour le ' . $currentName . ' ne peut pas être négatif.');

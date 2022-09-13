@@ -10,6 +10,7 @@ use App\Repository\CurrencyRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\FormController;
+use App\Controller\ValuationController;
 
 class PageController extends AbstractController
 {   
@@ -17,10 +18,19 @@ class PageController extends AbstractController
     public function index(CallApiService $callApiService, CurrencyRepository $currencyRepo): Response
     {
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
-        $apiData = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $total = $currencyRepo->find(1)->getAmount();
+        $investedCurrencies = $currencyRepo->findAllGreaterThanZero();
+        $changes = [];
+        for ($i = 0; $i < count($investedCurrencies); $i++)
+        {
+            $key = array_search($investedCurrencies[$i]->getIdApi(), array_column($apiResponse['data'], 'id'));
+            $changes[$i] = $apiResponse['data'][$key]['quote']['EUR']['percent_change_24h'];           
+        }
+
         return $this->render('page/index.html.twig', [
-            'apiData' => $apiData,
+            'investedCurrencies' => $investedCurrencies,
+            'changes' => $changes,
             'total' => $total
         ]);
     }
@@ -34,12 +44,12 @@ class PageController extends AbstractController
         FormController $form): Response
     {
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
-        $apiData = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
         $addForm = $form->getForm($currencies, $request);
-        $form->flushForm($request, $addForm, $currencyRepo, $em, $apiData);   
+        $form->flushForm($request, $addForm, $currencyRepo, $em, $apiResponse);   
         return $this->render('page/add.html.twig', [
-            'apiData' => $apiData,
+            'apiReponse' => $apiResponse,
             'currencies' => $currencies,
             'currencyForm' => $addForm->createView()
         ]);
@@ -54,10 +64,10 @@ class PageController extends AbstractController
         FormController $form): Response
     {
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
-        $apiData = json_decode($callApiService->getCryptoData($cryptoApiKey));
+        $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
         $removeForm = $form->getForm($currencies, $request);
-        $form->flushForm($request, $removeForm, $currencyRepo, $em, $apiData);
+        $form->flushForm($request, $removeForm, $currencyRepo, $em, $apiResponse);
         return $this->render('page/remove.html.twig', [
             'currencies' => $currencies,
             'currencyForm' => $removeForm->createView()
@@ -65,10 +75,15 @@ class PageController extends AbstractController
     }
 
     #[Route('/chart', name: 'chart')]
-    public function chart(): Response
+    public function chart(
+        CallApiService $callApiService,
+        CurrencyRepository $currencyRepo,
+        EntityManagerInterface $em,
+        ValuationController $valuationController)
     {
+        
         return $this->render('page/chart.html.twig', [
-            'controller_name' => 'PageController',
+            
         ]);
     }
 }

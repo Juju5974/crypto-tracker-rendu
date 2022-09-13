@@ -47,9 +47,18 @@ class CurrencyRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c');
     }
 
-
-
-
+        /*
+    * Return Currency[]
+    */
+    public function findAllGreaterThanZero(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.amount > 0')
+            ->andWhere('c.idApi > 0')
+            ->orderBy('c.amount', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Currency[] Returns an array of Currency objects

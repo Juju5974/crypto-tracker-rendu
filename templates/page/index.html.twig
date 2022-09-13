@@ -12,25 +12,25 @@
             </a>  
         </div>
     </header>
-    <article class="total text-center my-5">
+    <article class="total text-center py-5">
         <a href="{{ path('chart') }}" class="text-light">
-            <div>{{ total }} €</div>
+            <div>{{ total|number_format(0, '.', ' ') }} €</div>
         </a>    
     </article>
     <article class="article-list mx-auto">
 
-        {% for i in 0 .. 29 %}
+        {% for i in 0..investedCurrencies|length - 1 %}
             <section class="list row mx-auto p-2">
                 <div class="actif col">
-                    <img src="{{ asset('images/logos/' ~ apiData.data[i].id ~ '.png') }}" class="crypto-logo">
-                    <span class="crypto-acronym px-2">{{ apiData.data[i].symbol }}</span>
-                    <span class="crypto-name">({{ apiData.data[i].name }})</span>
+                    <img src="{{ asset('images/logos/' ~ investedCurrencies[i].idApi ~ '.png') }}" class="crypto-logo">
+                    <span class="crypto-acronym px-2">{{ investedCurrencies[i].symbol }}</span>
+                    <span class="crypto-name">({{ investedCurrencies[i].name }})</span>
                 </div>
-                {% if apiData.data[i].quote.EUR.percent_change_24h > 3 %}
+                {% if changes[i] > 3 %}
                     <img src="{{ asset('images/double-arrow-up.svg') }}" class="crypto-arrow col">
-                {% elseif apiData.data[i].quote.EUR.percent_change_24h > 0 %}
+                {% elseif changes[i] > 0 %}
                     <img src="{{ asset('images/arrow-up.svg') }}" class="crypto-arrow col">
-                {% elseif apiData.data[i].quote.EUR.percent_change_24h > -3 %}
+                {% elseif changes[i] > -3 %}
                     <img src="{{ asset('images/arrow-down.svg') }}" class="crypto-arrow col">
                 {% else %}
                     <img src="{{ asset('images/double-arrow-down.svg') }}" class="crypto-arrow col">

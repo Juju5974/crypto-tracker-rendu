@@ -80,9 +80,9 @@ class FormController extends AbstractController
                 $selectedCurrencyRepo[0]->setAmount($newAmount);
                 $em->flush();
                 $this->addFlash('success', 'La quantité de ' . $selectedQuantity . ' ' . $currentName . ' a bien été pris en compte.');
-            } else if ($newAmount < 0) 
+            } else if ($newQuantity < 0) 
             {
-                $this->addFlash('fail', 'Le solde pour le ' . $currentName . ' ne peut pas être négatif.');
+                $this->addFlash('fail', 'La quantité pour le ' . $currentName . ' ne peut pas être négative.');
             } else 
             {
                 $this->addFlash('error', 'Le serveur a rencontré une erreur.');

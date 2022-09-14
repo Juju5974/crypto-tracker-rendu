@@ -73,7 +73,7 @@ class FormController extends AbstractController
             $newQuantity = $currentQuantity + $selectedQuantity;
             $newAmount = $currentAmount + $selectedAmount;
             $newTotal = $currentTotal + $selectedAmount;
-            if ($newAmount >= 0)
+            if ($newQuantity >= 0)
             {
                 $currencyRepo->findBy(['name' => 'Total'])[0]->setAmount($newTotal);
                 $selectedCurrencyRepo[0]->setQuantity($newQuantity);

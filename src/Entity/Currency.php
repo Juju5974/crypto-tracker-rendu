@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CurrencyRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,8 +27,8 @@ class Currency
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\Column]
-    private ?int $amount = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $amount = null;
 
     public function getId(): ?int
     {
@@ -82,12 +83,12 @@ class Currency
         return $this;
     }
 
-    public function getAmount(): ?int
+    public function getAmount(): ?string
     {
         return $this->amount;
     }
 
-    public function setAmount(int $amount): self
+    public function setAmount(string $amount): self
     {
         $this->amount = $amount;
 

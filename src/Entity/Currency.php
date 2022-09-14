@@ -24,8 +24,8 @@ class Currency
     #[ORM\Column]
     private ?int $idApi = null;
 
-    #[ORM\Column]
-    private ?int $quantity = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 3)]
+    private ?string $quantity = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $amount = null;
@@ -71,12 +71,12 @@ class Currency
         return $this;
     }
 
-    public function getQuantity()
+    public function getQuantity(): ?string
     {
         return $this->quantity;
     }
 
-    public function setQuantity($quantity)
+    public function setQuantity(string $quantity): self
     {
         $this->quantity = $quantity;
 

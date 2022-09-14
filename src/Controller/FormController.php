@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Validator\Constraints\PositiveOrZero;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class FormController extends AbstractController
 {   
@@ -24,11 +24,11 @@ class FormController extends AbstractController
             ])
             ->add('quantity', NumberType::class, [
                 'attr' => ['placeholder' => 'Quantité'],
-                'constraints' => new PositiveOrZero(['message' => 'La quantité doit être positve.'])
+                'constraints' => new Positive(['message' => 'La quantité doit être positive.'])
             ])
             ->add('amount', NumberType::class, [
                 'attr' => ['placeholder' => 'Prix d\'achat'],
-                'constraints' => new PositiveOrZero(['message' => 'Le montant doit être positif.'])
+                'constraints' => new Positive(['message' => 'Le montant doit être positif.'])
             ])
             ->add('submit', SubmitType::class, ['label' => 'VALIDER'])
             ->getForm();

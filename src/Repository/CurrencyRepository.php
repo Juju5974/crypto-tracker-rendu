@@ -53,9 +53,9 @@ class CurrencyRepository extends ServiceEntityRepository
     public function findAllGreaterThanZero(): array
     {
         return $this->createQueryBuilder('c')
-            ->where('c.amount > 0')
+            ->where('c.quantity > 0')
             ->andWhere('c.idApi > 0')
-            ->orderBy('c.amount', 'DESC')
+            ->orderBy('c.quantity', 'DESC')
             ->getQuery()
             ->getResult();
     }

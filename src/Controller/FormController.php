@@ -66,15 +66,15 @@ class FormController extends AbstractController
                 $newQuantity = $quantityRepo + $selectedQuantity;
                 $newAmount = $amountRepo + $selectedAmount;
                 $newTotal = $totalRepo + $selectedAmount;
-                
-                        //Input montant à coder
-
-
-
             } else if ($routeName === 'remove')
             {
                 $newQuantity = $quantityRepo - $selectedQuantity;
-                $selectedQuantityWithAmountRepo = $totalRepo / $quantityRepo * $selectedQuantity;
+                if ($quantityRepo != 0)
+                {
+                    $selectedQuantityWithAmountRepo = $amountRepo / $quantityRepo * $selectedQuantity;
+                } else {
+                    $selectedQuantityWithAmountRepo = 0;
+                }
                 $gain = $gainRepo + $selectedAmount - $selectedQuantityWithAmountRepo;
                 $newAmount = $amountRepo - $selectedQuantityWithAmountRepo;
                 $newTotal = $totalRepo - $selectedQuantityWithAmountRepo + $gain;

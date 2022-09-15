@@ -95,6 +95,8 @@ class PageController extends AbstractController
             'labels' =>$labels,
             'datasets' => [
                 [
+                    'pointRadius' => 0,
+                    'tension' => 0.5,
                     'backgroundColor' => 'rgb(255, 255, 255)',
                     'borderColor' => 'rgb(31, 195, 108)',
                     'data' => $data,
@@ -102,7 +104,11 @@ class PageController extends AbstractController
             ],
         ]);
 
-        $chart->setOptions([/*...*/]);
+        $chart->setOptions(['plugins' => [
+            'legend' => [
+                'display' => false
+            ]
+        ]]);
         return $this->render('page/chart.html.twig', [
             'chart' => $chart
         ]);

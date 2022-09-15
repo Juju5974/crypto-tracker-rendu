@@ -55,7 +55,7 @@ class CurrencyRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->where('c.quantity > 0')
             ->andWhere('c.idApi > 0')
-            ->orderBy('c.quantity', 'DESC')
+            ->orderBy('c.amount', 'DESC')
             ->getQuery()
             ->getResult();
     }

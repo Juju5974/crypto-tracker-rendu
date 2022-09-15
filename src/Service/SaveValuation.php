@@ -23,7 +23,7 @@ class SaveValuation
         $newTotal = 0;
         for ($i = 2; $i <= 31; $i++)
         {
-            $totalRepo += $currencies[$i]->getQuantity();
+            $totalRepo += $currencies[$i]->getAmount();
             $key = array_search($currencies[$i]->getIdApi(), array_column($apiResponse['data'], 'id'));
             $euroConversion = $apiResponse['data'][$key]['quote']['EUR']['price'];
             $newAmount = $currencies[$i]->getQuantity() * $euroConversion;
@@ -31,7 +31,7 @@ class SaveValuation
             $newTotal += $newAmount;
         }
         $currencies[0]->setAmount($newTotal);
-        $delta = $newTotal - $totalRepo;
+        $delta = $newTotal - $totalRepo + $currencies[1]->getAmount();
         $valuation = new Valuation();
         $valuation->setDate(new \DateTime('now'));
         $valuation->setDelta($delta);

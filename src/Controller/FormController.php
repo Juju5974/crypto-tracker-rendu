@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Validator\Constraints\Positive;
 
 class FormController extends AbstractController
@@ -22,12 +22,14 @@ class FormController extends AbstractController
             ->add('currency', ChoiceType::class, [
                 'choices' => ['Sélectionner une crypto' => false] + $options,
             ])
-            ->add('quantity', TextType::class, [
+            ->add('quantity', NumberType::class, [
                 'attr' => ['placeholder' => 'Quantité'],
+                'invalid_message' => 'La quantité doit être un nombre.',
                 'constraints' => new Positive(['message' => 'La quantité doit être positive.'])
             ])
-            ->add('amount', TextType::class, [
+            ->add('amount', NumberType::class, [
                 'attr' => ['placeholder' => 'Prix d\'achat'],
+                'invalid_message' => 'La montant doit être un nombre.',
                 'constraints' => new Positive(['message' => 'Le montant doit être positif.'])
             ])
             ->add('submit', SubmitType::class, ['label' => 'VALIDER'])

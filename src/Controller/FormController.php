@@ -77,10 +77,8 @@ class FormController extends AbstractController
                 $selectedQuantityWithAmountRepo = $totalRepo / $quantityRepo * $selectedQuantity;
                 $gain = $gainRepo + $selectedAmount - $selectedQuantityWithAmountRepo;
                 $newAmount = $amountRepo - $selectedQuantityWithAmountRepo;
-                $newTotal = $totalRepo - $selectedAmount;
+                $newTotal = $totalRepo - $selectedQuantityWithAmountRepo + $gain;
             }
-            
-            dump($selectedAmount, $newAmount, $newTotal - $totalRepo);
             if ($newQuantity >= 0)
             {
                 $currencyRepo->findBy(['name' => 'Total'])[0]->setAmount($newTotal);

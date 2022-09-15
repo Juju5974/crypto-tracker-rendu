@@ -7,9 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CurrencyRepository;
+use App\Repository\ValuationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\FormController;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class PageController extends AbstractController
 {   
@@ -75,13 +78,33 @@ class PageController extends AbstractController
 
     #[Route('/chart', name: 'chart')]
     public function chart(
-        CallApiService $callApiService,
-        CurrencyRepository $currencyRepo,
-        EntityManagerInterface $em)
+        ValuationRepository $valuationRepo, 
+        ChartBuilderInterface $chartBuilder): Response
     {
-        
+        $valuations = $valuationRepo->findAll();
+        $labels = [];
+        $data = [];
+
+        foreach ($valuations as $valuation) {
+            $labels[] = $valuation->getDate()->format('d/m');
+            $data[] = $valuation->getDelta();
+        }
+        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
+
+        $chart->setData([
+            'labels' =>$labels,
+            'datasets' => [
+                [
+                    'backgroundColor' => 'rgb(255, 255, 255)',
+                    'borderColor' => 'rgb(31, 195, 108)',
+                    'data' => $data,
+                ],
+            ],
+        ]);
+
+        $chart->setOptions([/*...*/]);
         return $this->render('page/chart.html.twig', [
-            
+            'chart' => $chart
         ]);
     }
 }

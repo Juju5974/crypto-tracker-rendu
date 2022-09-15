@@ -188,6 +188,11 @@ ul {
     margin: 0;
 }
 
+.chart {
+    width: 85%;
+    margin : 5% auto;
+}
+
 @media screen and (min-width: 600px) {   
     body {
         width: 100%;

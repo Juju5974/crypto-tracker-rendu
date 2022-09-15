@@ -19,11 +19,11 @@ class SaveValuation
         $cryptoApiKey = $this->getParams->get('CRYPTO_API_KEY');
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
-        $currentTotal = 0;
+        $totalRepo = 0;
         $newTotal = 0;
-        for ($i = 1; $i <= 30; $i++)
+        for ($i = 2; $i <= 31; $i++)
         {
-            $currentTotal += $currencies[$i]->getQuantity();
+            $totalRepo += $currencies[$i]->getQuantity();
             $key = array_search($currencies[$i]->getIdApi(), array_column($apiResponse['data'], 'id'));
             $euroConversion = $apiResponse['data'][$key]['quote']['EUR']['price'];
             $newAmount = $currencies[$i]->getQuantity() * $euroConversion;
@@ -31,7 +31,7 @@ class SaveValuation
             $newTotal += $newAmount;
         }
         $currencies[1]->setAmount($newTotal);
-        $delta = $newTotal - $currentTotal;
+        $delta = $newTotal - $totalRepo;
         $valuation = new Valuation();
         $valuation->setDate(new \DateTime('now'));
         $valuation->setDelta($delta);

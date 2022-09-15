@@ -14,7 +14,7 @@ class FormController extends AbstractController
     {
         $routeName = $request->attributes->get('_route');
         $options = [];
-        for ($i = 1; $i <= 30; $i++)
+        for ($i = 2; $i <= 31; $i++)
         {
             $options[$currencies[$i]->getName() . ' (' . $currencies[$i]->getSymbol() . ')'] = $currencies[$i]->getIdApi();
         }
@@ -54,14 +54,17 @@ class FormController extends AbstractController
             $key = array_search($selectedCurrency, array_column($apiResponse['data'], 'id'));
             $euroConversion = $apiResponse['data'][$key]['quote']['EUR']['price'];
             $selectedAmount = $selectedQuantity * $euroConversion;
-            $currentTotal = $currencyRepo->findBy(['name' => 'Total'])[0]->getAmount();
+            $totalRepo = $currencyRepo->findBy(['name' => 'Total'])[0]->getAmount();
+            $gainRepo = $currencyRepo->findBy(['name' => 'Gain'])[0]->getAmount();
             $selectedCurrencyRepo = $currencyRepo->findBy(['idApi' => $selectedCurrency]);
-            $currentName = $selectedCurrencyRepo[0]->getName();
-            $currentQuantity = $selectedCurrencyRepo[0]->getQuantity();
-            $currentAmount = $selectedCurrencyRepo[0]->getAmount();
+            $nameRepo = $selectedCurrencyRepo[0]->getName();
+            $quantityRepo = $selectedCurrencyRepo[0]->getQuantity();
+            $amountRepo = $selectedCurrencyRepo[0]->getAmount();
             if ($routeName === 'add')
             {
-
+                $newQuantity = $quantityRepo + $selectedQuantity;
+                $newAmount = $amountRepo + $selectedAmount;
+                $newTotal = $totalRepo + $selectedAmount;
                 
                         //Input montant à coder
 
@@ -69,22 +72,28 @@ class FormController extends AbstractController
 
             } else if ($routeName === 'remove')
             {
-                $selectedQuantity = - $selectedQuantity;
-                $selectedAmount = - $selectedAmount;
+                $newQuantity = $quantityRepo - $selectedQuantity;
+                $selectedQuantityWithAmountRepo = $totalRepo / $quantityRepo * $selectedQuantity;
+                $gain = $gainRepo + $selectedAmount - $selectedQuantityWithAmountRepo;
+                $newAmount = $amountRepo - $selectedQuantityWithAmountRepo;
+                $newTotal = $totalRepo - $selectedAmount;
             }
-            $newQuantity = $currentQuantity + $selectedQuantity;
-            $newAmount = $currentAmount + $selectedAmount;
-            $newTotal = $currentTotal + $selectedAmount;
+            
+            dump($selectedAmount, $newAmount, $newTotal - $totalRepo);
             if ($newQuantity >= 0)
             {
                 $currencyRepo->findBy(['name' => 'Total'])[0]->setAmount($newTotal);
                 $selectedCurrencyRepo[0]->setQuantity($newQuantity);
                 $selectedCurrencyRepo[0]->setAmount($newAmount);
+                if ($routeName === 'remove')
+                {
+                    $currencyRepo->findBy(['name' => 'Gain'])[0]->setAmount($gain);
+                }
                 $em->flush();
-                $this->addFlash('success', 'La quantité de ' . $selectedQuantity . ' ' . $currentName . ' a bien été pris en compte.');
+                $this->addFlash('success', 'La quantité de ' . $selectedQuantity . ' ' . $nameRepo . ' a bien été pris en compte.');
             } else if ($newQuantity < 0) 
             {
-                $this->addFlash('fail', 'La quantité pour le ' . $currentName . ' ne peut pas être négative.');
+                $this->addFlash('fail', 'La quantité pour le ' . $nameRepo . ' ne peut pas être négative.');
             } else 
             {
                 $this->addFlash('error', 'Le serveur a rencontré une erreur.');

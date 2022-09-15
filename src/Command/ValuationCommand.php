@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Repository\CurrencyRepository;
+use App\Repository\ValuationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\SaveValuation;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,6 +23,7 @@ class ValuationCommand extends Command
     public function __construct(
         private CallApiService $callApiService,
         private CurrencyRepository $currencyRepo,
+        private ValuationRepository $valuationRepo,
         private EntityManagerInterface $em,
         private SaveValuation $saveValuation)
     {
@@ -32,8 +34,9 @@ class ValuationCommand extends Command
     {
         $callApiService = $this->callApiService;
         $currencyRepo = $this->currencyRepo;
+        $valuationRepo = $this->valuationRepo;
         $em = $this->em;
-        $this->saveValuation->save($callApiService, $currencyRepo, $em);
+        $this->saveValuation->save($callApiService, $currencyRepo, $valuationRepo, $em);
         return Command::SUCCESS;
     }
 }

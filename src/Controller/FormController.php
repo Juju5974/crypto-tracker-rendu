@@ -20,7 +20,8 @@ class FormController extends AbstractController
         }
         $formRequest = $this->createFormBuilder([])
             ->add('currency', ChoiceType::class, [
-                'choices' => ['Sélectionner une crypto' => false] + $options,
+                'placeholder' => 'Sélectionner une crypto',
+                'choices' => $options,
             ])
             ->add('quantity', NumberType::class, [
                 'attr' => ['placeholder' => 'Quantité'],

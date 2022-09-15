@@ -14,11 +14,13 @@ class SaveValuation
         $this->getParams = $getParams;
     }
     
-    public function save($callApiService, $currencyRepo, $em)
+    public function save($callApiService, $currencyRepo, $valuationRepo, $em)
     {
         $cryptoApiKey = $this->getParams->get('CRYPTO_API_KEY');
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
+        $lastValuation = $valuationRepo->findLatestDate();
+        $delta = $lastValuation[0]->getDelta();
         $totalRepo = 0;
         $newTotal = 0;
         for ($i = 2; $i <= 31; $i++)
@@ -31,7 +33,7 @@ class SaveValuation
             $newTotal += $newAmount;
         }
         $currencies[0]->setAmount($newTotal);
-        $delta = $newTotal - $totalRepo + $currencies[1]->getAmount();
+        $delta += $newTotal - $totalRepo + $currencies[1]->getAmount();
         $valuation = new Valuation();
         $valuation->setDate(new \DateTime('now'));
         $valuation->setDelta($delta);

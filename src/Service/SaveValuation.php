@@ -30,7 +30,7 @@ class SaveValuation
             $currencies[$i]->setAmount($newAmount);
             $newTotal += $newAmount;
         }
-        $currencies[1]->setAmount($newTotal);
+        $currencies[0]->setAmount($newTotal);
         $delta = $newTotal - $totalRepo;
         $valuation = new Valuation();
         $valuation->setDate(new \DateTime('now'));

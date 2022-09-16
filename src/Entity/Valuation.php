@@ -17,8 +17,9 @@ class Valuation
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column]
-    private ?int $delta = null;
+    
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $delta = null;
 
     public function getId(): ?int
     {
@@ -37,12 +38,12 @@ class Valuation
         return $this;
     }
 
-    public function getDelta(): ?int
+    public function getDelta(): ?string
     {
         return $this->delta;
     }
 
-    public function setDelta(int $delta): self
+    public function setDelta(string $delta): self
     {
         $this->delta = $delta;
 

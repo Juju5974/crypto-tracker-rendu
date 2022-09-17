@@ -48,6 +48,15 @@ class ValuationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findSevenLatestDate(): array
+    {
+        return $this->createQueryBuilder('v')
+            ->orderBy('v.date', 'DESC')
+            ->setMaxResults(7)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Valuation[] Returns an array of Valuation objects
 //     */

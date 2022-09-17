@@ -48,7 +48,7 @@ class PageController extends AbstractController
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
-        $addForm = $form->getForm($currencies, $request);
+        $addForm = $form->getForm($currencies, $request, $apiResponse);
         $form->flushForm($request, $addForm, $currencyRepo, $em, $apiResponse);   
         return $this->render('page/add.html.twig', [
             'apiReponse' => $apiResponse,
@@ -68,7 +68,7 @@ class PageController extends AbstractController
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
-        $removeForm = $form->getForm($currencies, $request);
+        $removeForm = $form->getForm($currencies, $request, $apiResponse);
         $form->flushForm($request, $removeForm, $currencyRepo, $em, $apiResponse);
         return $this->render('page/remove.html.twig', [
             'currencies' => $currencies,
@@ -81,7 +81,7 @@ class PageController extends AbstractController
         ValuationRepository $valuationRepo, 
         ChartBuilderInterface $chartBuilder): Response
     {
-        $valuations = $valuationRepo->findAll();
+        $valuations = $valuationRepo->findSevenLatestDate();
         $labels = [];
         $data = [];
 
@@ -101,14 +101,41 @@ class PageController extends AbstractController
                     'borderColor' => 'rgb(31, 195, 108)',
                     'data' => $data,
                 ],
+                [
+                    'pointRadius' => 0,
+                    'borderColor' => '#efefef',
+                    'borderWidth' => 1,
+                    'data' => [0, 0, 0, 0, 0, 0, 0]
+                ],
             ],
         ]);
 
-        $chart->setOptions(['plugins' => [
-            'legend' => [
-                'display' => false
+        $chart->setOptions([
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                ]
+            ],
+            'scales' => [
+                'y' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => '€',
+                    ],
+                    'grid' => [
+                        'borderColor' => '#efefef',
+                        'borderWidth' => 1,
+                    ]
+                ],
+                'x' => [
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Dates',
+                    ]
+                ] 
             ]
-        ]]);
+        ]);
+
         return $this->render('page/chart.html.twig', [
             'chart' => $chart
         ]);

@@ -30,7 +30,7 @@ class CallApiService
                     ], 
                     'query' => [
                         'convert' => 'EUR',
-                        'limit' => 30
+                        'limit' => 35
                     ],
                 ]
             );

@@ -10,18 +10,24 @@ use Symfony\Component\Validator\Constraints\Positive;
 
 class FormController extends AbstractController
 {   
-    public function getForm($currencies, $request)
+    public function getForm($currencies, $request, $apiResponse)
     {
         $routeName = $request->attributes->get('_route');
         $options = [];
         for ($i = 2; $i <= 31; $i++)
         {
-            $options[$currencies[$i]->getName() . ' (' . $currencies[$i]->getSymbol() . ')'] = $currencies[$i]->getIdApi();
+            $idApi = $currencies[$i]->getIdApi();
+            $key = array_search($idApi, array_column($apiResponse['data'], 'id'));
+            if ($key !== false) {
+                $options[$currencies[$i]->getName() . ' (' . $currencies[$i]->getSymbol() . ')'] = $idApi;
+                $euroConversion[$i - 2] = [$apiResponse['data'][$key]['quote']['EUR']['price'],$apiResponse['data'][$key]['id']];
+            }
         }
         $formRequest = $this->createFormBuilder([])
             ->add('currency', ChoiceType::class, [
                 'placeholder' => 'Sélectionner une crypto',
                 'choices' => $options,
+                'choice_attr' => function() { return ['data-amount' => 'test'];},
             ])
             ->add('quantity', NumberType::class, [
                 'attr' => ['placeholder' => 'Quantité'],
@@ -30,7 +36,7 @@ class FormController extends AbstractController
             ])
             ->add('amount', NumberType::class, [
                 'attr' => ['placeholder' => 'Prix d\'achat'],
-                'invalid_message' => 'La montant doit être un nombre.',
+                'invalid_message' => 'Le montant doit être un nombre.',
                 'constraints' => new Positive(['message' => 'Le montant doit être positif.'])
             ])
             ->add('submit', SubmitType::class, ['label' => 'VALIDER'])

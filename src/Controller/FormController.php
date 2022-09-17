@@ -23,7 +23,6 @@ class FormController extends AbstractController
                 $euroConversion[$currencies[$i]->getName() . ' (' . $currencies[$i]->getSymbol() . ')'] = ['data-amount' => round($apiResponse['data'][$keyApi]['quote']['EUR']['price'], 3)];
             }
         }
-        dump($euroConversion);
         $formRequest = $this->createFormBuilder([])
             ->add('currency', ChoiceType::class, [
                 'placeholder' => 'Sélectionner une crypto',

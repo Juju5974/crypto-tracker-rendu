@@ -81,7 +81,7 @@ class PageController extends AbstractController
         ValuationRepository $valuationRepo, 
         ChartBuilderInterface $chartBuilder): Response
     {
-        $valuations = $valuationRepo->findSevenLatestDate();
+        $valuations = array_reverse($valuationRepo->findSevenLastDate());
         $labels = [];
         $data = [];
 

@@ -17,17 +17,18 @@ class FormController extends AbstractController
         for ($i = 2; $i <= 31; $i++)
         {
             $idApi = $currencies[$i]->getIdApi();
-            $key = array_search($idApi, array_column($apiResponse['data'], 'id'));
-            if ($key !== false) {
+            $keyApi = array_search($idApi, array_column($apiResponse['data'], 'id'));
+            if ($keyApi !== false) {
                 $options[$currencies[$i]->getName() . ' (' . $currencies[$i]->getSymbol() . ')'] = $idApi;
-                $euroConversion[$i - 2] = [$apiResponse['data'][$key]['quote']['EUR']['price'],$apiResponse['data'][$key]['id']];
+                $euroConversion[$currencies[$i]->getName() . ' (' . $currencies[$i]->getSymbol() . ')'] = ['data-amount' => round($apiResponse['data'][$keyApi]['quote']['EUR']['price'], 3)];
             }
         }
+        dump($euroConversion);
         $formRequest = $this->createFormBuilder([])
             ->add('currency', ChoiceType::class, [
                 'placeholder' => 'Sélectionner une crypto',
                 'choices' => $options,
-                'choice_attr' => function() { return ['data-amount' => 'test'];},
+                'choice_attr' => $euroConversion,
             ])
             ->add('quantity', NumberType::class, [
                 'attr' => ['placeholder' => 'Quantité'],

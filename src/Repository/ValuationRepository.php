@@ -39,7 +39,7 @@ class ValuationRepository extends ServiceEntityRepository
         }
     }
 
-    public function findLatestDate(): array
+    public function findLastDate(): array
     {
         return $this->createQueryBuilder('v')
             ->orderBy('v.date', 'DESC')
@@ -48,7 +48,7 @@ class ValuationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findSevenLatestDate(): array
+    public function findSevenLastDate(): array
     {
         return $this->createQueryBuilder('v')
             ->orderBy('v.date', 'DESC')

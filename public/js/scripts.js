@@ -10,12 +10,19 @@ let unitPrice = 0;
 
 function changeCurrencyFunction(event) {
     unitPrice = event.target.options[event.target.selectedIndex].dataset.amount;
-    amountFunction()
+    if (formCurrency.value !== '' && formQuantity.value !== '') {
+        formAmount.value = (unitPrice * formQuantity.value).toFixed(2);
+    }
 };
 
 function amountFunction() {
-    if (formCurrency.value !== '' && formQuantity.value !== '') {
-        formAmount.value = (unitPrice * formQuantity.value).toFixed(2);
+    if (formCurrency.value !== '') {
+        if (unitPrice !== 0) {
+            formAmount.value = (unitPrice * formQuantity.value).toFixed(2);
+            console.log(unitPrice)
+        } else if (formCurrency.value !== '') {
+            unitPrice = formCurrency.options[formCurrency.selectedIndex].dataset.amount;
+        }
     }
 };
 

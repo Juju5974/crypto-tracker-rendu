@@ -23,7 +23,7 @@ class CallApiService
         {
             $response = $this->client->request(
                 'GET',
-                'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
+                'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest/test', [
                     'headers' => [
                         'Content-Type' => 'text/plain',
                         'X-CMC_PRO_API_KEY' => $cryptoApiKey
@@ -34,17 +34,12 @@ class CallApiService
                     ],
                 ]
             );
+            return $response->getContent();
             
         } 
         catch (\Exception $e) 
         {
-            $content = $this->twig->render(
-                'error.html.twig',
-                ['message' => 'Une erreur est survenue.']
-            );
-    
-            return new Response($content);
+            die('Le site rencontre un problème. Nous nous efforçons de le régler le plus rapidement possible. Veuillez nous excuser pour le désagrément.');
         }
-        return $response->getContent();
     }
 }

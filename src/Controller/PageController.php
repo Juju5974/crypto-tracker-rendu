@@ -49,7 +49,11 @@ class PageController extends AbstractController
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
         $addForm = $form->getForm($currencies, $request, $apiResponse);
-        $form->flushForm($request, $addForm, $currencyRepo, $em, $apiResponse);   
+        if ($addForm->isSubmitted() && $addForm->isValid()) 
+        {
+            $form->flushForm($request, $addForm, $currencyRepo, $em, $apiResponse);
+            return $this->redirectToRoute('add');
+        }   
         return $this->render('page/add.html.twig', [
             'apiReponse' => $apiResponse,
             'currencies' => $currencies,
@@ -69,7 +73,11 @@ class PageController extends AbstractController
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
         $removeForm = $form->getForm($currencies, $request, $apiResponse);
-        $form->flushForm($request, $removeForm, $currencyRepo, $em, $apiResponse);
+        if ($removeForm->isSubmitted() && $removeForm->isValid()) 
+        {
+            $form->flushForm($request, $removeForm, $currencyRepo, $em, $apiResponse);
+            return $this->redirectToRoute('remove');
+        }
         return $this->render('page/remove.html.twig', [
             'currencies' => $currencies,
             'currencyForm' => $removeForm->createView()

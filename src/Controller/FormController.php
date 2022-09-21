@@ -53,7 +53,7 @@ class FormController extends AbstractController
     {
         $routeName = $request->attributes->get('_route');
         $data = $formRequest->getData();
-        // $selectedCurrency like id_api
+        /* $selectedCurrency equals id_api */
         $selectedCurrency = $data['currency'];
         $selectedQuantity = $data['quantity'];
         $key = array_search($selectedCurrency, array_column($apiResponse['data'], 'id'));
@@ -79,6 +79,7 @@ class FormController extends AbstractController
             } else {
                 $selectedQuantityWithAmountRepo = 0;
             }
+            /* When a currency is sold, the gain or loss is added to $gain and removed from the currency total */
             $gain = $gainRepo + $selectedAmount - $selectedQuantityWithAmountRepo;
             $newAmount = $amountRepo - $selectedQuantityWithAmountRepo;
             $newTotal = $totalRepo - $selectedQuantityWithAmountRepo + $gain;

@@ -20,10 +20,12 @@ class SaveValuation
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $currencies = $currencyRepo->findAll();
         $gain = $currencies[1]->getAmount();
+        /* Get the last delta */
         $lastValuation = $valuationRepo->findLastDate();
         $delta = $lastValuation[0]->getDelta();
         $totalRepo = 0;
         $newTotal = $gain;
+        /* Calculate the new total of each currency with the current unit price */
         for ($i = 2; $i <= 31; $i++)
         {
             $totalRepo += $currencies[$i]->getAmount();

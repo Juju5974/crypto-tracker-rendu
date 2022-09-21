@@ -22,6 +22,7 @@ class PageController extends AbstractController
         $cryptoApiKey = $this->getParameter('CRYPTO_API_KEY');
         $apiResponse = json_decode($callApiService->getCryptoData($cryptoApiKey), true);
         $total = $currencyRepo->find(1)->getAmount();
+        /* Get only the invested currencies on the homepage */
         $investedCurrencies = $currencyRepo->findAllGreaterThanZero();
         $changes = [];
         for ($i = 0; $i < count($investedCurrencies); $i++)
@@ -29,7 +30,6 @@ class PageController extends AbstractController
             $key = array_search($investedCurrencies[$i]->getIdApi(), array_column($apiResponse['data'], 'id'));
             $changes[$i] = $apiResponse['data'][$key]['quote']['EUR']['percent_change_24h'];           
         }
-
         return $this->render('page/index.html.twig', [
             'investedCurrencies' => $investedCurrencies,
             'changes' => $changes,
@@ -92,13 +92,11 @@ class PageController extends AbstractController
         $valuations = array_reverse($valuationRepo->findSevenLastDate());
         $labels = [];
         $data = [];
-
         foreach ($valuations as $valuation) {
             $labels[] = $valuation->getDate()->format('d/m');
             $data[] = $valuation->getDelta();
         }
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
-
         $chart->setData([
             'labels' =>$labels,
             'datasets' => [
@@ -117,7 +115,6 @@ class PageController extends AbstractController
                 ],
             ],
         ]);
-
         $chart->setOptions([
             'plugins' => [
                 'legend' => [
@@ -143,7 +140,6 @@ class PageController extends AbstractController
                 ] 
             ]
         ]);
-
         return $this->render('page/chart.html.twig', [
             'chart' => $chart
         ]);

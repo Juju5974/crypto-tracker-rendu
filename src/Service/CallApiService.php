@@ -3,18 +3,14 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 class CallApiService
 {
     private $client;
-    private $twig;
 
-    public function __construct(HttpClientInterface $client, Environment $twig)
+    public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-        $this->twig = $twig;
     }
     
     public function getCryptoData($cryptoApiKey)
@@ -23,7 +19,7 @@ class CallApiService
         {
             $response = $this->client->request(
                 'GET',
-                'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest/test', [
+                'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
                     'headers' => [
                         'Content-Type' => 'text/plain',
                         'X-CMC_PRO_API_KEY' => $cryptoApiKey
@@ -35,7 +31,6 @@ class CallApiService
                 ]
             );
             return $response->getContent();
-            
         } 
         catch (\Exception $e) 
         {

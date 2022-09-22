@@ -12,6 +12,11 @@ https://crypto-tracker-business.herokuapp.com/
 - Doctrine
 - Heroku
 
+## Documentation
 
+- [Symfony](https://symfony.com/doc/current/index.html)
+- [CoinMarketCap](https://coinmarketcap.com/api/documentation/v1/)
+- [Chartjs](https://www.chartjs.org/docs/latest/)
 
+#
 *by Juliette Verschoore*

@@ -13,4 +13,5 @@ https://crypto-tracker-business.herokuapp.com/
 - Heroku
 
 
-by Juliette Verschoore
+
+*by Juliette Verschoore*
